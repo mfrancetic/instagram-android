@@ -57,8 +57,10 @@ public class UserFeedActivity extends AppCompatActivity {
                             file.getDataInBackground(new GetDataCallback() {
                                 @Override
                                 public void done(byte[] data, ParseException e) {
-                                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                    setImage(bitmap);
+                                    if (e == null && data != null) {
+                                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                        setImage(bitmap);
+                                    }
                                 }
                             });
                         }
