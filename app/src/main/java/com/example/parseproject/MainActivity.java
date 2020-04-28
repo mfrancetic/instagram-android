@@ -1,5 +1,6 @@
 package com.example.parseproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,8 +59,16 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         logoImageView.setOnClickListener(this);
         signupLoginLayout.setOnClickListener(this);
 
+        checkIfUserLoggedIn();
+
         signUpLoginButtonClick();
         signUpLoginTextViewClick();
+    }
+
+    private void checkIfUserLoggedIn() {
+        if (ParseUser.getCurrentUser() != null) {
+            goToUserListActivity();
+        }
     }
 
     private void signUpLoginTextViewClick() {
@@ -102,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             public void done(ParseException e) {
                 if (e == null) {
                     showToast(getString(R.string.sign_up_successful));
+                    goToUserListActivity();
                 } else {
                     showToast(e.getMessage());
                 }
@@ -115,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             public void done(ParseUser user, ParseException e) {
                 if (e == null && user != null) {
                     showToast(getString(R.string.login_successful));
+                    goToUserListActivity();
                 } else if (e != null) {
                     showToast(e.getMessage());
                 }
@@ -173,5 +184,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
         }
+    }
+
+    private void goToUserListActivity(){
+        Intent intent = new Intent(this, UserListActivity.class);
+        startActivity(intent);
     }
 }
