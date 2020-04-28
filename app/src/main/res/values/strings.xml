@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ParseProject</string>
+    <string name="app_logo_content_description">App logo</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="log_in">Log in</string>
+    <string name="sign_up_successful">You have successfully signed up</string>
+    <string name="sign_up_failed">Signed up failed</string>
+    <string name="login_failed">Login failed</string>
+    <string name="login_successful">You have successfully loged in</string>
 </resources>
