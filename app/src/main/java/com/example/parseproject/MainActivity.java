@@ -1,8 +1,12 @@
 package com.example.parseproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -29,11 +34,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private Button signUpLoginButton;
     private TextView switchToSignUpLoginTextView;
     private boolean signUpModeActive = true;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
 
         setupLoginRegisterView();
 
@@ -110,10 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    showToast(getString(R.string.sign_up_successful));
+                    ToastUtils.showToast(context, getString(R.string.sign_up_successful));
                     goToUserListActivity();
                 } else {
-                    showToast(e.getMessage());
+                    ToastUtils.showToast(context, e.getMessage());
                 }
             }
         });
@@ -124,10 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null && user != null) {
-                    showToast(getString(R.string.login_successful));
+                    ToastUtils.showToast(context, getString(R.string.login_successful));
                     goToUserListActivity();
                 } else if (e != null) {
-                    showToast(e.getMessage());
+                    ToastUtils.showToast(context, e.getMessage());
                 }
             }
         });
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private boolean areUsernameAndPasswordFieldsValid(String username, String password) {
         if (username.matches("") || password.matches("")) {
-            showToast(getString(R.string.username_password_required));
+            ToastUtils.showToast(context, getString(R.string.username_password_required));
             return false;
         } else {
             return true;
@@ -148,10 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private String getPassword() {
         return passwordEditText.getText().toString();
-    }
-
-    private void showToast(String toastText) {
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
     private void setupSignUpMode() {
@@ -186,8 +190,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         }
     }
 
-    private void goToUserListActivity(){
+    private void goToUserListActivity() {
         Intent intent = new Intent(this, UserListActivity.class);
         startActivity(intent);
     }
+
 }

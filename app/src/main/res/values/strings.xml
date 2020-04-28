@@ -12,4 +12,10 @@
     <string name="login_successful">You have successfully logged in</string>
     <string name="or">Or,</string>
     <string name="username_password_required">Username and password required</string>
+    <string name="share">Share</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="image_table_key">Image</string>
+    <string name="image_column_key">image</string>
+    <string name="image_shared">Image has been shared</string>
+    <string name="image_not_shared">There has been an issue uploading the image</string>
 </resources>
