@@ -41,6 +41,9 @@ public class UserFeedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String chosenUsername = intent.getStringExtra(getString(R.string.username_key));
+
+        setTitle(chosenUsername + getString(R.string.photos));
+
         query.whereEqualTo(getString(R.string.username_key), chosenUsername);
         query.orderByDescending(getString(R.string.created_at_column_key));
         query.findInBackground(new FindCallback<ParseObject>() {

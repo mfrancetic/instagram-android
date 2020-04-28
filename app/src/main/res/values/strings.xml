@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ParseProject</string>
+    <string name="app_name">Instagram Clone App</string>
     <string name="app_logo_content_description">App logo</string>
     <string name="username">Username</string>
     <string name="username_key">username</string>
@@ -19,4 +19,7 @@
     <string name="image_shared">Image has been shared</string>
     <string name="image_not_shared">There has been an issue uploading the image</string>
     <string name="created_at_column_key">createdAt</string>
+    <string name="logout">Logout</string>
+    <string name="user_feed">User feed</string>
+    <string name="photos">\'s photos</string>
 </resources>

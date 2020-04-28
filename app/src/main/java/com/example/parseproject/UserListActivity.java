@@ -52,6 +52,7 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
 
         context = this;
+        setTitle(getString(R.string.app_name));
 
         getUsers();
     }
@@ -108,8 +109,15 @@ public class UserListActivity extends AppCompatActivity {
             } else {
                 getPhoto();
             }
+        } else if (item.getItemId() == R.id.logout) {
+            logoutUser();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logoutUser() {
+        ParseUser.logOut();
+        onBackPressed();
     }
 
     private void getPhoto() {
