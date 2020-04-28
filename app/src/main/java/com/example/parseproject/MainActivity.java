@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button signUpLoginButton;
     private TextView switchToSignUpLoginTextView;
+    private boolean signUpModeActive = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +40,24 @@ public class MainActivity extends AppCompatActivity {
         signUpLoginButton = findViewById(R.id.sign_up_login_button);
         switchToSignUpLoginTextView = findViewById(R.id.switch_to_sign_up_login_text_view);
 
-        String switchToSignUpLogin = getString(R.string.or) + getString(R.string.sign_up);
-        switchToSignUpLoginTextView.setText(switchToSignUpLogin);
-
-        signUpLoginButton.setText(getString(R.string.log_in));
+        if (signUpModeActive) {
+            setupSignUpMode();
+        } else {
+            setupLoginMode();
+        }
 
         signUpLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (signUpLoginButton.getText().equals(getString(R.string.sign_up))) {
-                    signUpUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                } else {
-                    loginUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                String username = getUsername();
+                String password = getPassword();
+
+                if (areUsernameAndPasswordFieldsValid(username, password)) {
+                    if (signUpModeActive) {
+                        signUpUser(username, password);
+                    } else {
+                        loginUser(username, password);
+                    }
                 }
             }
         });
@@ -58,14 +65,10 @@ public class MainActivity extends AppCompatActivity {
         switchToSignUpLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (signUpLoginButton.getText().equals(getString(R.string.sign_up))) {
-                    signUpLoginButton.setText(getString(R.string.log_in));
-                    String switchToSignUpLogin = getString(R.string.or) + getString(R.string.sign_up);
-                    switchToSignUpLoginTextView.setText(switchToSignUpLogin);
+                if (signUpModeActive) {
+                   setupLoginMode();
                 } else {
-                    signUpLoginButton.setText(getString(R.string.sign_up));
-                    String switchToSignUpLogin = getString(R.string.or) + getString(R.string.log_in);
-                    switchToSignUpLoginTextView.setText(switchToSignUpLogin);
+                   setupSignUpMode();
                 }
             }
         });
@@ -79,12 +82,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(MainActivity.this, getString(R.string.sign_up_successful),
-                            Toast.LENGTH_LONG).show();
+                    showToast(getString(R.string.sign_up_successful));
                 } else {
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, getString(R.string.sign_up_failed),
-                            Toast.LENGTH_LONG).show();
+                    showToast(e.getMessage());
                 }
             }
         });
@@ -94,15 +94,47 @@ public class MainActivity extends AppCompatActivity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-            if (e == null && user != null) {
-                Toast.makeText(MainActivity.this, getString(R.string.login_successful),
-                        Toast.LENGTH_LONG).show();
-            } else if (e != null) {
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, getString(R.string.login_failed),
-                        Toast.LENGTH_LONG).show();
-            }
+                if (e == null && user != null) {
+                    showToast(getString(R.string.login_successful));
+                } else if (e != null) {
+                    showToast(e.getMessage());
+                }
             }
         });
+    }
+
+    private boolean areUsernameAndPasswordFieldsValid(String username, String password) {
+        if (username.matches("") || password.matches("")) {
+            showToast(getString(R.string.username_password_required));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private String getUsername() {
+        return usernameEditText.getText().toString();
+    }
+
+    private String getPassword() {
+        return passwordEditText.getText().toString();
+    }
+
+    private void showToast(String toastText) {
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupSignUpMode(){
+        String switchToLogin = getString(R.string.or) + getString(R.string.log_in);
+        switchToSignUpLoginTextView.setText(switchToLogin);
+        signUpLoginButton.setText(getString(R.string.sign_up));
+        signUpModeActive = true;
+    }
+
+    private void setupLoginMode(){
+        signUpLoginButton.setText(getString(R.string.log_in));
+        String switchToSignUp = getString(R.string.or) + getString(R.string.sign_up);
+        switchToSignUpLoginTextView.setText(switchToSignUp);
+        signUpModeActive = false;
     }
 }

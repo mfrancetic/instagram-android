@@ -10,4 +10,5 @@
     <string name="login_failed">Login failed</string>
     <string name="login_successful">You have successfully logged in</string>
     <string name="or">Or,</string>
+    <string name="username_password_required">Username and password required</string>
 </resources>
