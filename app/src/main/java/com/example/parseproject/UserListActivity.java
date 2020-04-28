@@ -79,7 +79,9 @@ public class UserListActivity extends AppCompatActivity {
         userListAdapter = new UserListAdapter(users, new UserListAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-
+                Intent openUserFeedActivityIntent = new Intent(context, UserFeedActivity.class);
+                openUserFeedActivityIntent.putExtra(getString(R.string.username_key), users.get(position).getUsername());
+                startActivity(openUserFeedActivityIntent);
             }
         });
         userRecyclerView.setAdapter(userListAdapter);

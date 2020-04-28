@@ -18,4 +18,5 @@
     <string name="image_column_key">image</string>
     <string name="image_shared">Image has been shared</string>
     <string name="image_not_shared">There has been an issue uploading the image</string>
+    <string name="created_at_column_key">createdAt</string>
 </resources>
