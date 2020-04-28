@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/login_signup_layout"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/logoImageView"
+        android:id="@+id/logo_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_logo_content_description"
@@ -26,7 +27,7 @@
         android:autofillHints="@string/username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+        app:layout_constraintTop_toBottomOf="@id/logo_image_view" />
 
     <EditText
         android:id="@+id/password_edit_text"

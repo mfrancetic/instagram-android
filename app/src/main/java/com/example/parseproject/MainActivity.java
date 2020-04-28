@@ -1,13 +1,17 @@
 package com.example.parseproject;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.parse.LogInCallback;
 import com.parse.ParseAnalytics;
@@ -15,8 +19,10 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnKeyListener, View.OnClickListener {
 
+    private ConstraintLayout signupLoginLayout;
+    private ImageView logoImageView;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button signUpLoginButton;
@@ -35,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupLoginRegisterView() {
+        signupLoginLayout = findViewById(R.id.login_signup_layout);
+        logoImageView = findViewById(R.id.logo_image_view);
         usernameEditText = findViewById(R.id.username_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         signUpLoginButton = findViewById(R.id.sign_up_login_button);
@@ -46,6 +54,28 @@ public class MainActivity extends AppCompatActivity {
             setupLoginMode();
         }
 
+        passwordEditText.setOnKeyListener(this);
+        logoImageView.setOnClickListener(this);
+        signupLoginLayout.setOnClickListener(this);
+
+        signUpLoginButtonClick();
+        signUpLoginTextViewClick();
+    }
+
+    private void signUpLoginTextViewClick() {
+        switchToSignUpLoginTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (signUpModeActive) {
+                    setupLoginMode();
+                } else {
+                    setupSignUpMode();
+                }
+            }
+        });
+    }
+
+    private void signUpLoginButtonClick() {
         signUpLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,17 +88,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         loginUser(username, password);
                     }
-                }
-            }
-        });
-
-        switchToSignUpLoginTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (signUpModeActive) {
-                   setupLoginMode();
-                } else {
-                   setupSignUpMode();
                 }
             }
         });
@@ -124,17 +143,35 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
-    private void setupSignUpMode(){
+    private void setupSignUpMode() {
         String switchToLogin = getString(R.string.or) + getString(R.string.log_in);
         switchToSignUpLoginTextView.setText(switchToLogin);
         signUpLoginButton.setText(getString(R.string.sign_up));
         signUpModeActive = true;
     }
 
-    private void setupLoginMode(){
+    private void setupLoginMode() {
         signUpLoginButton.setText(getString(R.string.log_in));
         String switchToSignUp = getString(R.string.or) + getString(R.string.sign_up);
         switchToSignUpLoginTextView.setText(switchToSignUp);
         signUpModeActive = false;
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            signUpLoginButtonClick();
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.login_signup_layout || v.getId() == R.id.logo_image_view) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null && getCurrentFocus() != null) {
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        }
     }
 }
