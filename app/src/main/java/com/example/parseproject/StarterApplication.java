@@ -21,9 +21,9 @@ public class StarterApplication extends Application {
 
         // Add your initialization code here
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                .applicationId("")
-                .clientKey("")
-                .server("")
+                .applicationId(getString(R.string.appId))
+                .clientKey(getString(R.string.clientMasterKey))
+                .server(getString(R.string.serverUrl))
                 .build()
         );
 
@@ -52,4 +52,3 @@ public class StarterApplication extends Application {
 
     }
 }
-

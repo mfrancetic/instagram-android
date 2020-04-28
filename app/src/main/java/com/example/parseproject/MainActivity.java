@@ -13,9 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // checking how much the user has used the app
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
-
-
-
 }
