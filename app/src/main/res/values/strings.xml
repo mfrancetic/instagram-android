@@ -8,5 +8,6 @@
     <string name="sign_up_successful">You have successfully signed up</string>
     <string name="sign_up_failed">Signed up failed</string>
     <string name="login_failed">Login failed</string>
-    <string name="login_successful">You have successfully loged in</string>
+    <string name="login_successful">You have successfully logged in</string>
+    <string name="or">Or,</string>
 </resources>

@@ -1,10 +1,10 @@
 package com.example.parseproject;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private Button signUpButton;
-    private Button loginButton;
+    private Button signUpLoginButton;
+    private TextView switchToSignUpLoginTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +36,37 @@ public class MainActivity extends AppCompatActivity {
     private void setupLoginRegisterView() {
         usernameEditText = findViewById(R.id.username_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
-        signUpButton = findViewById(R.id.sign_up_button);
-        loginButton = findViewById(R.id.login_button);
+        signUpLoginButton = findViewById(R.id.sign_up_login_button);
+        switchToSignUpLoginTextView = findViewById(R.id.switch_to_sign_up_login_text_view);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        String switchToSignUpLogin = getString(R.string.or) + getString(R.string.sign_up);
+        switchToSignUpLoginTextView.setText(switchToSignUpLogin);
+
+        signUpLoginButton.setText(getString(R.string.log_in));
+
+        signUpLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUpUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                if (signUpLoginButton.getText().equals(getString(R.string.sign_up))) {
+                    signUpUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                } else {
+                    loginUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                }
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        switchToSignUpLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginUser(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                if (signUpLoginButton.getText().equals(getString(R.string.sign_up))) {
+                    signUpLoginButton.setText(getString(R.string.log_in));
+                    String switchToSignUpLogin = getString(R.string.or) + getString(R.string.sign_up);
+                    switchToSignUpLoginTextView.setText(switchToSignUpLogin);
+                } else {
+                    signUpLoginButton.setText(getString(R.string.sign_up));
+                    String switchToSignUpLogin = getString(R.string.or) + getString(R.string.log_in);
+                    switchToSignUpLoginTextView.setText(switchToSignUpLogin);
+                }
             }
         });
     }
