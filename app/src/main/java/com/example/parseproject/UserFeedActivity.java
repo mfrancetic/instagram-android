@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -24,6 +26,8 @@ public class UserFeedActivity extends AppCompatActivity {
 
     private LinearLayout linearLayout;
     private Context context;
+    private ImageView emptyImageView;
+    private TextView emptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class UserFeedActivity extends AppCompatActivity {
 
         context = this;
         linearLayout = findViewById(R.id.user_feed_linear_layout);
+        emptyImageView = findViewById(R.id.empty_image_view);
+        emptyTextView = findViewById(R.id.empty_text_view);
 
         getPhotosFromChosenUser();
     }
@@ -52,7 +58,7 @@ public class UserFeedActivity extends AppCompatActivity {
                 if (e == null && objects != null && objects.size() > 0) {
                     for (ParseObject object : objects) {
                         ParseFile file = (ParseFile) object.get(getString(R.string.image_column_key));
-                        System.out.println(file.getName() + file.getUrl());
+                        System.out.println("file name: " + file.getName() + " file URL: " + file.getUrl());
                         if (file != null) {
                             file.getDataInBackground(new GetDataCallback() {
                                 @Override
@@ -60,6 +66,8 @@ public class UserFeedActivity extends AppCompatActivity {
                                     if (e == null && data != null) {
                                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                                         setImage(bitmap);
+                                    } else if (e != null) {
+                                        ToastUtils.showToast(context, e.getMessage());
                                     }
                                 }
                             });
@@ -67,9 +75,15 @@ public class UserFeedActivity extends AppCompatActivity {
                     }
                 } else if (e != null) {
                     ToastUtils.showToast(context, e.getMessage());
+                    showEmptyView();
                 }
             }
         });
+    }
+
+    private void showEmptyView() {
+        emptyTextView.setVisibility(View.VISIBLE);
+        emptyImageView.setVisibility(View.VISIBLE);
     }
 
     private void setImage(Bitmap bitmap) {
@@ -80,5 +94,8 @@ public class UserFeedActivity extends AppCompatActivity {
         ));
         imageView.setImageBitmap(bitmap);
         linearLayout.addView(imageView);
+
+        emptyImageView.setVisibility(View.GONE);
+        emptyTextView.setVisibility(View.GONE);
     }
 }

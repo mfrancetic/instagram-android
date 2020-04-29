@@ -138,7 +138,14 @@ public class UserListActivity extends AppCompatActivity {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             byte[] byteArray = outputStream.toByteArray();
-            ParseFile file = new ParseFile("image.png", byteArray);
+            System.out.println("image URI: " + selectedImageLocation);
+            String path = selectedImageLocation.getPath();
+            ParseFile file = new ParseFile(null, byteArray);
+            if (path != null) {
+                String mediaPath = path.substring(22);
+                file = new ParseFile(mediaPath + ".png", byteArray);
+                System.out.println("image media path : " + mediaPath);
+            }
             ParseObject object = new ParseObject(getString(R.string.image_table_key));
             object.put(getString(R.string.image_column_key), file);
             object.put(getString(R.string.username_key), ParseUser.getCurrentUser().getUsername());

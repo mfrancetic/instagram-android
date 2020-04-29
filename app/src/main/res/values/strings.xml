@@ -5,6 +5,8 @@
     <string name="username_key">username</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign up</string>
+    <string name="no_account_yet_sign_up">No account yet? Sign up!</string>
+    <string name="account_log_in">Already registered? Login!</string>
     <string name="log_in">Log in</string>
     <string name="sign_up_successful">You have successfully signed up</string>
     <string name="sign_up_failed">Signed up failed</string>
@@ -22,4 +24,10 @@
     <string name="logout">Logout</string>
     <string name="user_feed">User feed</string>
     <string name="photos">\'s photos</string>
+    <string name="person_image_content_description">Person image</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="username_or_password_too_short">Username and password must be at least 4 characters</string>
+    <string name="no_spaces_allowed">Username and password cannot contain empty spaces</string>
+    <string name="no_photos_available">No photos available</string>
 </resources>

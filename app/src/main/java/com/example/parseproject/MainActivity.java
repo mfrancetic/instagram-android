@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private ConstraintLayout signupLoginLayout;
     private ImageView logoImageView;
     private EditText usernameEditText;
-    private EditText passwordEditText;
+    private EditText password1EditText;
+    private EditText password2EditText;
     private Button signUpLoginButton;
     private TextView switchToSignUpLoginTextView;
     private boolean signUpModeActive = true;
@@ -48,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         signupLoginLayout = findViewById(R.id.login_signup_layout);
         logoImageView = findViewById(R.id.logo_image_view);
         usernameEditText = findViewById(R.id.username_edit_text);
-        passwordEditText = findViewById(R.id.password_edit_text);
+        password1EditText = findViewById(R.id.password1_edit_text);
+        password2EditText = findViewById(R.id.password2_edit_text);
         signUpLoginButton = findViewById(R.id.sign_up_login_button);
         switchToSignUpLoginTextView = findViewById(R.id.switch_to_sign_up_login_text_view);
 
@@ -58,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             setupLoginMode();
         }
 
-        passwordEditText.setOnKeyListener(this);
+        password1EditText.setOnKeyListener(this);
+        password2EditText.setOnKeyListener(this);
         logoImageView.setOnClickListener(this);
         signupLoginLayout.setOnClickListener(this);
 
@@ -92,14 +95,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             @Override
             public void onClick(View v) {
                 String username = getUsername();
-                String password = getPassword();
+                String password = getPassword1();
 
-                if (areUsernameAndPasswordFieldsValid(username, password)) {
-                    if (signUpModeActive) {
+                if (signUpModeActive) {
+                    if (areUsernamePassword1Password2FieldsValid(username, password, getPassword2())) {
                         signUpUser(username, password);
-                    } else {
-                        loginUser(username, password);
                     }
+                } else if (areUsernameAndPasswordFieldsValid(username, password)) {
+                    loginUser(username, password);
                 }
             }
         });
@@ -145,25 +148,48 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         }
     }
 
+    private boolean areUsernamePassword1Password2FieldsValid(String username, String password,
+                                                             String password2) {
+        if (username.matches("") || password.matches("") || password2.matches("")) {
+            ToastUtils.showToast(context, getString(R.string.username_password_required));
+            return false;
+        } else if (!password.matches(password2)) {
+            ToastUtils.showToast(context, getString(R.string.passwords_do_not_match));
+            return false;
+        } else if(username.length() < 4 || password.length() < 4) {
+            ToastUtils.showToast(context, getString(R.string.username_or_password_too_short));
+            return false;
+        } else if(username.contains(" ") || password.contains(" ")) {
+            ToastUtils.showToast(context, getString(R.string.no_spaces_allowed));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private String getUsername() {
         return usernameEditText.getText().toString();
     }
 
-    private String getPassword() {
-        return passwordEditText.getText().toString();
+    private String getPassword1() {
+        return password1EditText.getText().toString();
+    }
+
+    private String getPassword2() {
+        return password2EditText.getText().toString();
     }
 
     private void setupSignUpMode() {
-        String switchToLogin = getString(R.string.or) + getString(R.string.log_in);
-        switchToSignUpLoginTextView.setText(switchToLogin);
+        switchToSignUpLoginTextView.setText(getString(R.string.account_log_in));
         signUpLoginButton.setText(getString(R.string.sign_up));
+        password2EditText.setVisibility(View.VISIBLE);
         signUpModeActive = true;
     }
 
     private void setupLoginMode() {
         signUpLoginButton.setText(getString(R.string.log_in));
-        String switchToSignUp = getString(R.string.or) + getString(R.string.sign_up);
-        switchToSignUpLoginTextView.setText(switchToSignUp);
+        password2EditText.setVisibility(View.GONE);
+        switchToSignUpLoginTextView.setText(getString(R.string.no_account_yet_sign_up));
         signUpModeActive = false;
     }
 
@@ -186,7 +212,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void goToUserListActivity() {
+        clearEditTextFields();
         Intent intent = new Intent(this, UserListActivity.class);
         startActivity(intent);
+    }
+
+    private void clearEditTextFields() {
+        usernameEditText.setText("");
+        password1EditText.setText("");
+        password2EditText.setText("");
     }
 }
