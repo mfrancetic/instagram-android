@@ -1,11 +1,14 @@
 package com.example.parseproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +23,17 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserFeedActivity extends AppCompatActivity {
 
-    private LinearLayout linearLayout;
+    private RecyclerView recyclerView;
     private Context context;
     private ImageView emptyImageView;
     private TextView emptyTextView;
+    private UserFeedAdapter adapter;
+    private List<Bitmap> images = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +41,25 @@ public class UserFeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_feed);
 
         context = this;
-        linearLayout = findViewById(R.id.user_feed_linear_layout);
+        recyclerView = findViewById(R.id.user_feed_recycler_view);
         emptyImageView = findViewById(R.id.empty_image_view);
         emptyTextView = findViewById(R.id.empty_text_view);
 
+        setupRecyclerView();
         getPhotosFromChosenUser();
+    }
+
+    private void setupRecyclerView() {
+
+        adapter = new UserFeedAdapter(images, new UserFeedAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+//                displayPhotoInDialog();
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     private void getPhotosFromChosenUser() {
@@ -65,7 +85,9 @@ public class UserFeedActivity extends AppCompatActivity {
                                 public void done(byte[] data, ParseException e) {
                                     if (e == null && data != null) {
                                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                        setImage(bitmap);
+                                        images.add(bitmap);
+                                        adapter.notifyDataSetChanged();
+                                        removeEmptyView();
                                     } else if (e != null) {
                                         ToastUtils.showToast(context, e.getMessage());
                                     }
@@ -81,21 +103,13 @@ public class UserFeedActivity extends AppCompatActivity {
         });
     }
 
+    private void removeEmptyView() {
+        emptyTextView.setVisibility(View.GONE);
+        emptyImageView.setVisibility(View.GONE);
+    }
+
     private void showEmptyView() {
         emptyTextView.setVisibility(View.VISIBLE);
         emptyImageView.setVisibility(View.VISIBLE);
-    }
-
-    private void setImage(Bitmap bitmap) {
-        ImageView imageView = new ImageView(getApplicationContext());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-        imageView.setImageBitmap(bitmap);
-        linearLayout.addView(imageView);
-
-        emptyImageView.setVisibility(View.GONE);
-        emptyTextView.setVisibility(View.GONE);
     }
 }

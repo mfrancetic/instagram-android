@@ -30,4 +30,5 @@
     <string name="username_or_password_too_short">Username and password must be at least 4 characters</string>
     <string name="no_spaces_allowed">Username and password cannot contain empty spaces</string>
     <string name="no_photos_available">No photos available</string>
+    <string name="user_feed_image_content_description">User feed image</string>
 </resources>
