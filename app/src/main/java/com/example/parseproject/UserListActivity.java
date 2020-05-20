@@ -49,7 +49,7 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
 
         context = this;
-        setTitle(getString(R.string.app_name));
+        setTitle(getString(R.string.user_list));
 
         getUsers();
     }
